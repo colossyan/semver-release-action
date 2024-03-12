@@ -40,6 +40,13 @@ func executeLatestTag(cmd *cobra.Command, args []string) {
 		cmd.Print("v0.0.0")
 		return
 	}
+
+	// should return 200 if not 404 according to:
+	// https://docs.github.com/en/rest/git/refs?apiVersion=2022-11-28#list-matching-references
+	if response != nil && response.StatusCode != 200 {
+		action.Fail(cmd, "invalid status code received from Github: %d", response.StatusCode)
+	}
+
 	action.AssertNoError(cmd, err, "could not list git refs: %s", err)
 
 	latest := semver.MustParse("0.0.0")
