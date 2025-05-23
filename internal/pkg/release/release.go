@@ -65,12 +65,12 @@ func execute(cmd *cobra.Command, releaseType string, args []string) {
 		return
 	case releaseTypeRelease:
 		if err := createGithubRelease(ctx, client, repo, release); err != nil {
-			action.AssertNoError(cmd, err, "could not create GitHub release: %s", err)
+			action.Fail(cmd, "could not create GitHub release: %s", err)
 		}
 		return
 	case releaseTypeTag:
 		if err := createLightweightTag(ctx, client, repo, release); err != nil {
-			action.AssertNoError(cmd, err, "could not create lightweight tag: %s", err)
+			action.Fail(cmd, "could not create lightweight tag: %s", err)
 		}
 		return
 	default:
